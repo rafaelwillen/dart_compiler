@@ -186,20 +186,55 @@ namespace dart_compiler.Core.Scanner
                 // Analisar / , /= , // ou /*
                 case '/':
                     ch = getChar();
+                    // Start of the comment
                     if (ch == '/')
                     {
+                        bool inComment = true;
                         ch = getChar();
-                        // TODO: Verificar comentário de uma linha
+                        while (inComment)
+                        {
+                            if (ch == '\0')
+                            {
+                                Console.Error.WriteLine("Alerta - end of file no comentário");
+                                inComment = false;
+                            }
+                            else if (ch == '\n')
+                            {
+                                inComment = false;
+                            }
+                            else ch = getChar();
+                        }
+                        lexToken = lex();
                     }
                     else if (ch == '=')
                     {
                         ch = getChar();
                         lexToken = Token.TokenCADivison;
                     }
+                    // Start of the comment
                     else if (ch == '*')
                     {
+                        bool inComment = true;
                         ch = getChar();
-                        // TODO: Verificar comentário de várias linhas
+                        while (inComment)
+                        {
+                            if (ch == '\0')
+                            {
+                                Console.Error.WriteLine("Alerta - end of file no comentário");
+                                inComment = false;
+                            }
+                            else if (ch == '*')
+                            {
+                                ch = getChar();
+                                if (ch == '/')
+                                {
+                                    ch = getChar();
+                                    inComment = false;
+                                }
+                            }
+                            else ch = getChar();
+                        }
+                        lexToken = lex();
                     }
                     else lexToken = Token.TokenDivision;
                     break;
