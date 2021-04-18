@@ -371,3 +371,8 @@ FodyWeavers.xsd
 
 # Local History for Visual Studio Code
 .history/
+
+# Ignores all dart files
+*.dart
+
+docs/
