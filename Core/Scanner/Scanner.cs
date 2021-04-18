@@ -21,6 +21,18 @@ namespace dart_compiler.Core.Scanner
             // Verificar tokens de dois ou três caracteres
             lexToken = verifyCharacterToken();
 
+            // Verificar token identificador ou keyword
+            if (isLetter(ch) || ch == '$' || ch == '_')
+            {
+                string identifier = ch.ToString();
+                while (isLetter(ch) || ch == '$' || ch == '_' || isDigit(ch))
+                {
+                    ch = getChar();
+                    identifier += ch;
+                }
+                lexToken = isKeyword(identifier) ? Token.TokenKeyword : Token.TokenID;
+            }
+
             return lexToken;
         }
 
@@ -238,11 +250,42 @@ namespace dart_compiler.Core.Scanner
         }
 
         /// <summary>
+        /// Verifica se o identificador é uma palavra reservada
+        /// </summary>
+        /// <param name="identifier">O identificador a ser verificado</param>
+        /// <returns>true se for uma palavra reservada</returns>
+        private bool isKeyword(string identifier)
+        {
+            string[] keywords = {
+                "assert", "break", "case", "catch", "class", "const", "continue",
+                "default", "do", "else", "enum", "extends", "false", "final", "finally",
+                "for", "if", "in", "is", "new", "null", "rethrow", "return", "super",
+                "switch", "this", "throw", "true", "try", "var", "void", "while", "with",
+                 "int", "double", "List", "Map", "String", "Object", "dynamic"
+            };
+            return Array.Exists(keywords, keyword => keyword.Equals(identifier));
+        }
+
+        /// <summary>
         /// Verifica se o caractere é um espaço em branco
         /// </summary>
         /// <param name="ch">O caractere a ser analisado</param>
         /// <returns>true se for um espaço em branco</returns>
         private bool isWhiteSpace(char ch) => ch == ' ';
+
+        /// <summary>
+        /// Verifica se o caractere é uma letra
+        /// </summary>
+        /// <param name="ch">O caractere a ser analisado</param>
+        /// <returns>true se for uma letra</returns>
+        private bool isLetter(char ch) => (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+
+        /// <summary>
+        /// Verifica se o caractere é um dígito
+        /// </summary>
+        /// <param name="ch">O caractere a ser analisado</param>
+        /// <returns>true se for um dígito</returns>
+        private bool isDigit(char ch) => ch >= '0' && ch <= '9';
 
         /// <summary>
         /// Not implemented
