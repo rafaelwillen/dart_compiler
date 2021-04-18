@@ -192,6 +192,14 @@ namespace dart_compiler.Core.Utils
         /// <summary>
         /// Token fechar parenteses rectos
         /// </summary>
-        TokenCloseBrackets
+        TokenCloseBrackets,
+        /// <summary>
+        /// Token fim do ficheiro
+        /// </summary>
+        TokenEOF,
+        /// <summary>
+        /// Token inválido
+        /// </summary>
+        TokenInvalid
     }
 }
