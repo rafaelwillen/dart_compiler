@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using dart_compiler.Core.Utils;
 
 namespace dart_compiler.Core.Scanner
@@ -10,8 +11,24 @@ namespace dart_compiler.Core.Scanner
     public class Scanner
     {
 
+        public bool EndOfFile { get; private set; }
+
         private char ch;
-        public Token lex()
+        private int charPointer;
+        private int linePointer;
+        private List<string> buffer;
+
+        public Scanner(string filePath)
+        {
+            buffer = new List<string>();
+            buffer.AddRange(File.ReadAllLines(filePath));
+            charPointer = 0;
+            linePointer = 0;
+            EndOfFile = false;
+            ch = getChar();
+        }
+
+        public Token Analex()
         {
             Token lexToken = Token.TokenInvalid;
             // Ignorar espaços em branco
@@ -24,11 +41,11 @@ namespace dart_compiler.Core.Scanner
             // Verificar token identificador ou keyword
             if (isLetter(ch) || ch == '$' || ch == '_')
             {
-                string identifier = ch.ToString();
+                string identifier = string.Empty;
                 while (isLetter(ch) || ch == '$' || ch == '_' || isDigit(ch))
                 {
-                    ch = getChar();
                     identifier += ch;
+                    ch = getChar();
                 }
                 lexToken = isKeyword(identifier) ? Token.TokenKeyword : Token.TokenID;
             }
@@ -204,7 +221,7 @@ namespace dart_compiler.Core.Scanner
                             }
                             else ch = getChar();
                         }
-                        lexToken = lex();
+                        lexToken = Analex();
                     }
                     else if (ch == '=')
                     {
@@ -234,7 +251,7 @@ namespace dart_compiler.Core.Scanner
                             }
                             else ch = getChar();
                         }
-                        lexToken = lex();
+                        lexToken = Analex();
                     }
                     else lexToken = Token.TokenDivision;
                     break;
@@ -341,7 +358,19 @@ namespace dart_compiler.Core.Scanner
         /// <returns></returns>
         private char getChar()
         {
-            throw new NotImplementedException();
+
+            if (linePointer == buffer.Count && charPointer == buffer[buffer.Count - 1].Length)
+            {
+                EndOfFile = true;
+            }
+
+            if (charPointer == buffer[buffer.Count - 1].Length)
+            {
+                linePointer++;
+                charPointer = 0;
+                return '\n';
+            }
+            return buffer[linePointer][charPointer++];
         }
     }
 }
