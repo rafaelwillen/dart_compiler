@@ -33,6 +33,19 @@ namespace dart_compiler.Core.Scanner
                 lexToken = isKeyword(identifier) ? Token.TokenKeyword : Token.TokenID;
             }
 
+            // Verificar token inteiro ou hexadecimal
+            if (isDigit(ch))
+            {
+                // TODO: Reconhecer números hexadecimais
+                int value = 0;
+                while (isDigit(ch))
+                {
+                    value = value * 10 + ch - '0';
+                    ch = getChar();
+                }
+                lexToken = Token.TokenInteger;
+            }
+
             return lexToken;
         }
 
