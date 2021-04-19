@@ -30,11 +30,17 @@ namespace dart_compiler.Core.Scanner
 
         public Token Analex()
         {
+            if (ch == '\0')
+            {
+                EndOfFile = true;
+                return Token.TokenEOF;
+            }
             Token lexToken = Token.TokenInvalid;
             // Ignorar espaços em branco
             while (isWhiteSpace(ch)) ch = getChar();
             // Verificar tokens de um caractere
             lexToken = verifySingleCharacterToken();
+            if (lexToken != Token.TokenInvalid) return lexToken;
             // Verificar tokens de dois ou três caracteres
             lexToken = verifyCharacterToken();
 
@@ -358,17 +364,17 @@ namespace dart_compiler.Core.Scanner
         /// <returns></returns>
         private char getChar()
         {
-
-            if (linePointer == buffer.Count && charPointer == buffer[buffer.Count - 1].Length)
+            if (EndOfFile)
             {
-                EndOfFile = true;
+                throw new EndOfStreamException("Fim do ficheiro. Mais nada para ler");
             }
 
-            if (charPointer == buffer[buffer.Count - 1].Length)
+            if (charPointer == buffer[buffer.Count - 1].Length && linePointer == buffer.Count - 1) return '\0';
+
+            if (charPointer == buffer[linePointer].Length)
             {
                 linePointer++;
                 charPointer = 0;
-                return '\n';
             }
             return buffer[linePointer][charPointer++];
         }
