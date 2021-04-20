@@ -2,6 +2,7 @@
 using System.IO;
 
 using dart_compiler.Core.Scanner;
+using dart_compiler.Core;
 
 namespace dart_compiler
 {
@@ -35,9 +36,9 @@ namespace dart_compiler
 
             while (!scanner.EndOfFile)
             {
-                System.Console.WriteLine(scanner.Analex());
+                TableSymbol.Insert(scanner.Analex());
             }
-            Console.WriteLine("All Good!");
+            TableSymbol.PrintTable();
         }
     }
 }

@@ -10,6 +10,8 @@ namespace dart_compiler.Core.Scanner
     /// </summary>
     public class Scanner
     {
+        private const string KEY_TOKEN = "KEY_Token";
+        private const string KEY_LEXEME = "KEY_Lexeme";
 
         public bool EndOfFile { get; private set; }
 
@@ -28,21 +30,24 @@ namespace dart_compiler.Core.Scanner
             ch = getChar();
         }
 
-        public Token Analex()
+        public Symbol Analex()
         {
             if (ch == '\0')
             {
                 EndOfFile = true;
-                return Token.TokenEOF;
+                return new Symbol("", Token.TokenEOF, linePointer + 1);
             }
             Token lexToken = Token.TokenInvalid;
+            Dictionary<string, string> result = new Dictionary<string, string>();
             // Ignorar espaços em branco
             while (isWhiteSpace(ch)) ch = getChar();
             // Verificar tokens de um caractere
-            lexToken = verifySingleCharacterToken();
-            if (lexToken != Token.TokenInvalid) return lexToken;
+            result = verifySingleCharacterToken();
+            Enum.TryParse(result[KEY_TOKEN], out lexToken);
+            if (result[KEY_TOKEN] != Token.TokenInvalid.ToString()) return new Symbol(result[KEY_LEXEME], lexToken, linePointer + 1);
             // Verificar tokens de dois ou três caracteres
-            lexToken = verifyCharacterToken();
+            result = verifyCharacterToken();
+            Enum.TryParse(result[KEY_TOKEN], out lexToken);
 
             // Verificar token identificador ou keyword
             if (isLetter(ch) || ch == '$' || ch == '_')
@@ -53,6 +58,7 @@ namespace dart_compiler.Core.Scanner
                     identifier += ch;
                     ch = getChar();
                 }
+                result[KEY_LEXEME] = identifier;
                 lexToken = isKeyword(identifier) ? Token.TokenKeyword : Token.TokenID;
             }
 
@@ -66,6 +72,7 @@ namespace dart_compiler.Core.Scanner
                     value = value * 10 + ch - '0';
                     ch = getChar();
                 }
+                result[KEY_LEXEME] = value.ToString();
                 lexToken = Token.TokenInteger;
             }
 
@@ -74,7 +81,7 @@ namespace dart_compiler.Core.Scanner
                 ch = getChar();
             }
 
-            return lexToken;
+            return new Symbol(result[KEY_LEXEME], lexToken, linePointer + 1);
         }
 
         /// <summary>
@@ -84,21 +91,25 @@ namespace dart_compiler.Core.Scanner
         /// <returns>Retorna o <c>Token</c> para o caractere lido. Retorna <c>Token.Invalid</c> se não for  
         /// caractere válido neste contexto
         /// </returns>
-        private Token verifyCharacterToken()
+        private Dictionary<string, string> verifyCharacterToken()
         {
             Token lexToken = Token.TokenInvalid;
+            string lexeme = string.Empty;
             switch (ch)
             {
                 // Analisar <= , <, <<= ou  <<
                 case '<':
+                    lexeme += ch.ToString();
                     ch = getChar();
                     if (ch == '<')
                     {
                         // Possível << ou <<=
+                        lexeme += ch.ToString();
                         ch = getChar();
                         if (ch == '=')
                         {
                             lexToken = Token.TokenCA_LShift;
+                            lexeme += ch.ToString();
                             ch = getChar();
                         }
                         else lexToken = Token.TokenLeftShift;
@@ -106,6 +117,7 @@ namespace dart_compiler.Core.Scanner
                     else if (ch == '=')
                     {
                         lexToken = Token.TokenLessEqual;
+                        lexeme += ch.ToString();
                         ch = getChar();
                     }
                     // Exato <
@@ -113,19 +125,24 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar >=, >, >>= ou  >>
                 case '>':
+                    lexeme += ch.ToString();
                     ch = getChar();
                     if (ch == '=')
                     {
                         lexToken = Token.TokenGreaterEqual;
+                        lexeme += ch.ToString();
                         ch = getChar();
                     }
                     else if (ch == '>')
                     {
+                        lexeme += ch.ToString();
                         ch = getChar();
                         // Possível >>= ou >>
                         if (ch == '=')
                         {
+                            lexeme += ch.ToString();
                             lexToken = Token.TokenCA_RShift;
+                            ch = getChar();
                         }
                         else lexToken = Token.TokenRightShift;
                     }
@@ -133,9 +150,13 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar = ou ==
                 case '=':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         lexToken = Token.TokenEqual;
                         ch = getChar();
                     }
@@ -143,9 +164,13 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar != ou ==
                 case '!':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         lexToken = Token.TokenNotEqual;
                         ch = getChar();
                     }
@@ -153,14 +178,20 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar ||, |= ou |
                 case '|':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '|')
                     {
+                        lexeme += ch.ToString();
+
                         lexToken = Token.TokenOr;
                         ch = getChar();
                     }
                     else if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         lexToken = Token.TokenCA_OR;
                         ch = getChar();
                     }
@@ -168,14 +199,20 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar &&, & ou &=
                 case '&':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '&')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenAnd;
                     }
                     else if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenCA_AND;
                     }
@@ -183,14 +220,19 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar +, ++, +=
                 case '+':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '+')
                     {
+                        lexeme += ch.ToString();
                         ch = getChar();
                         lexToken = Token.TokenIncrement;
                     }
                     else if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenCAAdition;
                     }
@@ -198,14 +240,20 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar -, --, -=
                 case '-':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '-')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenDecrement;
                     }
                     else if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenCASubtraction;
                     }
@@ -213,6 +261,7 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar / , /= , // ou /*
                 case '/':
+                    lexeme += ch.ToString();
                     ch = getChar();
                     // Start of the comment
                     if (ch == '/')
@@ -231,7 +280,7 @@ namespace dart_compiler.Core.Scanner
                             }
                             else ch = getChar();
                         }
-                        lexToken = Analex();
+                        Analex();
                     }
                     else if (ch == '=')
                     {
@@ -261,15 +310,18 @@ namespace dart_compiler.Core.Scanner
                             }
                             else ch = getChar();
                         }
-                        lexToken = Analex();
+                        Analex();
                     }
                     else lexToken = Token.TokenDivision;
                     break;
                 // Analisar * , *=
                 case '*':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '=')
                     {
+                        lexeme += ch.ToString();
                         ch = getChar();
                         lexToken = Token.TokenCAMultiplication;
                     }
@@ -277,9 +329,13 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar %, %=
                 case '%':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenCAModulus;
                     }
@@ -287,9 +343,13 @@ namespace dart_compiler.Core.Scanner
                     break;
                 // Analisar ^, ^=
                 case '^':
+                    lexeme += ch.ToString();
+
                     ch = getChar();
                     if (ch == '=')
                     {
+                        lexeme += ch.ToString();
+
                         ch = getChar();
                         lexToken = Token.TokenCA_NOT;
                     }
@@ -311,10 +371,34 @@ namespace dart_compiler.Core.Scanner
                         lexToken = Token.TokenString;
                     }
                     stringLiteral += ch.ToString();
+                    lexeme = stringLiteral;
                     ch = getChar();
                     break;
+                case '\'':
+                    lineDiference = linePointer;
+                    stringLiteral = ch.ToString();
+                    ch = getChar();
+                    while (ch != '\'')
+                    {
+                        stringLiteral += ch;
+                        ch = getChar();
+                        if (linePointer > lineDiference)
+                        {
+                            lexToken = Token.TokenInvalid;
+                            break;
+                        }
+                        lexToken = Token.TokenString;
+                    }
+                    stringLiteral += ch.ToString();
+                    lexeme = stringLiteral;
+                    ch = getChar();
+                    break;
+
             }
-            return lexToken;
+            return new Dictionary<string, string>() {
+                {KEY_LEXEME, lexeme},
+                {KEY_TOKEN, Enum.GetName(lexToken)}
+            };
         }
 
         /// <summary>
@@ -323,9 +407,10 @@ namespace dart_compiler.Core.Scanner
         /// <returns>Retorna o <c>Token</c> para o caractere lido. Retorna <c>Token.Invalid</c> se não for  
         /// caractere válido neste contexto
         /// </returns>
-        private Token verifySingleCharacterToken()
+        private Dictionary<string, string> verifySingleCharacterToken()
         {
             Token lexToken = Token.TokenInvalid;
+            string lexeme = ch.ToString();
             switch (ch)
             {
                 case ';': lexToken = Token.TokenEndStatement; ch = getChar(); break;
@@ -339,7 +424,10 @@ namespace dart_compiler.Core.Scanner
                 case ']': lexToken = Token.TokenCloseBrackets; ch = getChar(); break;
                 case '\0': lexToken = Token.TokenEOF; break;
             }
-            return lexToken;
+            return new Dictionary<string, string>() {
+                {KEY_LEXEME, lexeme},
+                {KEY_TOKEN, Enum.GetName(lexToken)}
+            }; ;
         }
 
         /// <summary>
@@ -354,7 +442,7 @@ namespace dart_compiler.Core.Scanner
                 "default", "do", "else", "enum", "extends", "false", "final", "finally",
                 "for", "if", "in", "is", "new", "null", "rethrow", "return", "super",
                 "switch", "this", "throw", "true", "try", "var", "void", "while", "with",
-                 "int", "double", "List", "Map", "String", "Object", "dynamic"
+                 "int", "double", "List", "Map", "String", "Object", "dynamic", "import"
             };
             return Array.Exists(keywords, keyword => keyword.Equals(identifier));
         }
@@ -381,9 +469,9 @@ namespace dart_compiler.Core.Scanner
         private bool isDigit(char ch) => ch >= '0' && ch <= '9';
 
         /// <summary>
-        /// Not implemented
+        /// Move o ponteiro do caractere e retorna o caractere lido na posição anterior
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Um caractere do ficheiro</returns>
         private char getChar()
         {
             if (EndOfFile)
