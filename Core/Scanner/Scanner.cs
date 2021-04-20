@@ -69,6 +69,11 @@ namespace dart_compiler.Core.Scanner
                 lexToken = Token.TokenInteger;
             }
 
+            if (lexToken == Token.TokenInvalid)
+            {
+                ch = getChar();
+            }
+
             return lexToken;
         }
 
@@ -290,6 +295,24 @@ namespace dart_compiler.Core.Scanner
                         lexToken = Token.TokenCA_NOT;
                     }
                     else lexToken = Token.TokenBitwiseNot;
+                    break;
+                case '"':
+                    int lineDiference = linePointer;
+                    string stringLiteral = ch.ToString();
+                    ch = getChar();
+                    while (ch != '"')
+                    {
+                        stringLiteral += ch;
+                        ch = getChar();
+                        if (linePointer > lineDiference)
+                        {
+                            lexToken = Token.TokenInvalid;
+                            break;
+                        }
+                        lexToken = Token.TokenString;
+                    }
+                    stringLiteral += ch.ToString();
+                    ch = getChar();
                     break;
             }
             return lexToken;
