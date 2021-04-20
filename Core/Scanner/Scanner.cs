@@ -223,7 +223,6 @@ namespace dart_compiler.Core.Scanner
                         {
                             if (ch == '\0')
                             {
-                                Console.Error.WriteLine("Alerta - end of file no comentário");
                                 inComment = false;
                             }
                             else if (ch == '\n')
