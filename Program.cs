@@ -36,7 +36,9 @@ namespace dart_compiler
 
             while (!scanner.EndOfFile)
             {
-                TableSymbol.Insert(scanner.Analex());
+                var symbol = scanner.Analex();
+                if (symbol.isComment()) continue;
+                TableSymbol.Insert(symbol);
             }
             TableSymbol.PrintTable();
         }

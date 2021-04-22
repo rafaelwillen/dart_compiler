@@ -200,6 +200,10 @@ namespace dart_compiler.Core.Utils
         /// <summary>
         /// Token inválido
         /// </summary>
-        TokenInvalid
+        TokenInvalid,
+        /// <summary>
+        /// Token comentário
+        /// </summary>
+        TokenComment
     }
 }

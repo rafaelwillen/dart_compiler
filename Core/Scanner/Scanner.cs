@@ -48,7 +48,6 @@ namespace dart_compiler.Core.Scanner
             // Verificar tokens de dois ou três caracteres
             result = verifyCharacterToken();
             Enum.TryParse(result[KEY_TOKEN], out lexToken);
-
             // Verificar token identificador ou keyword
             if (isLetter(ch) || ch == '$' || ch == '_')
             {
@@ -267,20 +266,18 @@ namespace dart_compiler.Core.Scanner
                     if (ch == '/')
                     {
                         bool inComment = true;
+                        // Usado para verificar se mudou de linha
+                        int commentLineStart = linePointer;
                         ch = getChar();
                         while (inComment)
                         {
-                            if (ch == '\0')
+                            if (ch == '\0' || commentLineStart < linePointer)
                             {
                                 inComment = false;
-                            }
-                            else if (ch == '\n')
-                            {
-                                inComment = false;
+                                lexToken = Token.TokenComment;
                             }
                             else ch = getChar();
                         }
-                        Analex();
                     }
                     else if (ch == '=')
                     {
@@ -298,6 +295,7 @@ namespace dart_compiler.Core.Scanner
                             {
                                 Console.Error.WriteLine("Alerta - end of file no comentário");
                                 inComment = false;
+                                // Lançar uma exceção?
                             }
                             else if (ch == '*')
                             {
@@ -306,11 +304,11 @@ namespace dart_compiler.Core.Scanner
                                 {
                                     ch = getChar();
                                     inComment = false;
+                                    lexToken = Token.TokenComment;
                                 }
                             }
                             else ch = getChar();
                         }
-                        Analex();
                     }
                     else lexToken = Token.TokenDivision;
                     break;

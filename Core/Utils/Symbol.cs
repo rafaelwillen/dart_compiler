@@ -30,5 +30,11 @@ namespace dart_compiler.Core.Utils
             Token = token;
             LineOfCode = lineOfCode;
         }
+
+        /// <summary>
+        /// Verifica se este símbolo é um comentário de linha ou múltiplas linhas
+        ///</summary>
+        /// <returns>true se for um comentário</returns>
+        public bool isComment() => Token == Token.TokenComment;
     }
 }
