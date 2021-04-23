@@ -92,7 +92,7 @@ namespace dart_compiler.Core.Utils
         /// <summary>
         /// Token operador de atribuição divisão
         /// </summary>
-        TokenCADivison,
+        TokenCADivision,
         /// <summary>
         /// Token operador de atribuição multiplicação
         /// </summary>

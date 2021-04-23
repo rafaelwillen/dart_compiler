@@ -282,7 +282,7 @@ namespace dart_compiler.Core.Scanner
                     else if (ch == '=')
                     {
                         ch = getChar();
-                        lexToken = Token.TokenCADivison;
+                        lexToken = Token.TokenCADivision;
                     }
                     // Start of the comment
                     else if (ch == '*')
@@ -413,6 +413,8 @@ namespace dart_compiler.Core.Scanner
             {
                 case ';': lexToken = Token.TokenEndStatement; ch = getChar(); break;
                 case ',': lexToken = Token.TokenComma; ch = getChar(); break;
+                case '.': lexToken = Token.TokenDot; ch = getChar(); break;
+                case '?': lexToken = Token.TokenInterrogation; ch = getChar(); break;
                 case '^': lexToken = Token.TokenBitwiseNot; ch = getChar(); break;
                 case '(': lexToken = Token.TokenOpenParenteses; ch = getChar(); break;
                 case ')': lexToken = Token.TokenCloseParenteses; ch = getChar(); break;
