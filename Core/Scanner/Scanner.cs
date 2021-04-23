@@ -23,7 +23,7 @@ namespace dart_compiler.Core.Scanner
         public Scanner(string filePath)
         {
             buffer = new List<string>();
-            buffer.AddRange(File.ReadAllLines(filePath));
+            buffer.AddRange(Array.ConvertAll<string, string>(File.ReadAllLines(filePath), line => line.Trim()));
             charPointer = 0;
             linePointer = 0;
             EndOfFile = false;
@@ -485,6 +485,10 @@ namespace dart_compiler.Core.Scanner
             {
                 linePointer++;
                 charPointer = 0;
+            }
+            while (buffer[linePointer].Equals(string.Empty))
+            {
+                linePointer++;
             }
             return buffer[linePointer][charPointer++];
         }
