@@ -288,14 +288,14 @@ namespace dart_compiler.Core.Scanner
                     else if (ch == '*')
                     {
                         bool inComment = true;
+                        int commentLineStart = linePointer;
                         ch = getChar();
                         while (inComment)
                         {
                             if (ch == '\0')
                             {
-                                Console.Error.WriteLine("Alerta - end of file no comentário");
                                 inComment = false;
-                                // Lançar uma exceção?
+                                throw new CommentaryEndOfFile(commentLineStart);
                             }
                             else if (ch == '*')
                             {
