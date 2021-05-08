@@ -58,7 +58,26 @@ namespace dart_compiler.Core.Scanner
                     ch = getChar();
                 }
                 result[KEY_LEXEME] = identifier;
-                lexToken = isKeyword(identifier) ? Token.TokenKeyword : Token.TokenID;
+                if (isKeyword(identifier))
+                {
+                    foreach (Token token in Enum.GetValues<Token>())
+                    {
+                        if (!token.ToString().StartsWith("TokenKeyword"))
+                        {
+                            continue;
+                        }
+                        string stringToken = token.ToString().Substring(12).ToLower();
+                        if (stringToken.Equals(identifier))
+                        {
+                            lexToken = token;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    lexToken = Token.TokenID;
+                }
             }
 
             // Verificar token inteiro ou hexadecimal
