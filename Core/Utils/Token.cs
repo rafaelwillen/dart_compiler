@@ -150,10 +150,6 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenBitwiseOR,
         /// <summary>
-        /// Token palavra reservada
-        /// </summary>
-        TokenKeyword,
-        /// <summary>
         /// Token fim de expressão
         /// </summary>
         TokenEndStatement,
@@ -204,6 +200,166 @@ namespace dart_compiler.Core.Utils
         /// <summary>
         /// Token comentário
         /// </summary>
-        TokenComment
+        TokenComment,
+        /// <summary>
+        /// Token palavra reservada "assert"
+        /// </summary>
+        TokenKeywordAssert,
+        /// <summary>
+        /// Token palavra reservada "break"
+        /// </summary>
+        TokenKeywordBreak,
+        /// <summary>
+        /// Token palavra reservada "case"
+        /// </summary>
+        TokenKeywordCase,
+        /// <summary>
+        /// Token palavra reservada "catch"
+        /// </summary>
+        TokenKeywordCatch,
+        /// <summary>
+        /// Token palavra reservada "class"
+        /// </summary>
+        TokenKeywordClass,
+        /// <summary>
+        /// Token palavra reservada "const"
+        /// </summary>
+        TokenKeywordConst,
+        /// <summary>
+        /// Token palavra reservada "continue"
+        /// </summary>
+        TokenKeywordContinue,
+        /// <summary>
+        /// Token palavra reservada "default"
+        /// </summary>
+        TokenKeywordDefault,
+        /// <summary>
+        /// Token palavra reservada "do"
+        /// </summary>
+        TokenKeywordDo,
+        /// <summary>
+        /// Token palavra reservada "else"
+        /// </summary>
+        TokenKeywordElse,
+        /// <summary>
+        /// Token palavra reservada "enum"
+        /// </summary>
+        TokenKeywordEnum,
+        /// <summary>
+        /// Token palavra reservada "extends"
+        /// </summary>
+        TokenKeywordExtends,
+        /// <summary>
+        /// Token palavra reservada "false"
+        /// </summary>
+        TokenKeywordFalse,
+        /// <summary>
+        /// Token palavra reservada "finally"
+        /// </summary>
+        TokenKeywordFinally,
+        /// <summary>
+        /// Token palavra reservada "for"
+        /// </summary>
+        TokenKeywordFor,
+        /// <summary>
+        /// Token palavra reservada "if"
+        /// </summary>
+        TokenKeywordIf,
+        /// <summary>
+        /// Token palavra reservada "in"
+        /// </summary>
+        TokenKeywordIn,
+        /// <summary>
+        /// Token palavra reservada "is"
+        /// </summary>
+        TokenKeywordIs,
+        /// <summary>
+        /// Token palavra reservada "new"
+        /// </summary>
+        TokenKeywordNew,
+        /// <summary>
+        /// Token palavra reservada "null"
+        /// </summary>
+        TokenKeywordNull,
+        /// <summary>
+        /// Token palavra reservada "rethrow"
+        /// </summary>
+        TokenKeywordRethrow,
+        /// <summary>
+        /// Token palavra reservada "return"
+        /// </summary>
+        TokenKeywordReturn,
+        /// <summary>
+        /// Token palavra reservada "super"
+        /// </summary>
+        TokenKeywordSuper,
+        /// <summary>
+        /// Token palavra reservada "switch"
+        /// </summary>
+        TokenKeywordSwitch,
+        /// <summary>
+        /// Token palavra reservada "this"
+        /// </summary>
+        TokenKeywordThis,
+        /// <summary>
+        /// Token palavra reservada "throw"
+        /// </summary>
+        TokenKeywordThrow,
+        /// <summary>
+        /// Token palavra reservada "true"
+        /// </summary>
+        TokenKeywordTrue,
+        /// <summary>
+        /// Token palavra reservada "try"
+        /// </summary>
+        TokenKeywordTry,
+        /// <summary>
+        /// Token palavra reservada "var"
+        /// </summary>
+        TokenKeywordVar,
+        /// <summary>
+        /// Token palavra reservada "void"
+        /// </summary>
+        TokenKeywordVoid,
+        /// <summary>
+        /// Token palavra reservada "while"
+        /// </summary>
+        TokenKeywordWhile,
+        /// <summary>
+        /// Token palavra reservada "with"
+        /// </summary>
+        TokenKeywordWith,
+        /// <summary>
+        /// Token palavra reservada "int"
+        /// </summary>
+        TokenKeywordInt,
+        /// <summary>
+        /// Token palavra reservada "double"
+        /// </summary>
+        TokenKeywordDouble,
+        /// <summary>
+        /// Token palavra reservada "List"
+        /// </summary>
+        TokenKeywordList,
+        /// <summary>
+        /// Token palavra reservada "Map"
+        /// </summary>
+        TokenKeywordMap,
+        /// <summary>
+        /// Token palavra reservada "String"
+        /// </summary>
+        TokenKeywordString,
+        /// <summary>
+        /// Token palavra reservada "Object"
+        /// </summary>
+        TokenKeywordObject,
+        /// <summary>
+        /// Token palavra reservada "dynamic"
+        /// </summary>
+        TokenKeywordDynamic,
+        /// <summary>
+        /// Token palavra reservada "import"
+        /// </summary>
+        TokenKeywordImport
     }
 }
