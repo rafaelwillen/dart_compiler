@@ -415,14 +415,12 @@ namespace dart_compiler.Core.Scanner
                 case ',': lexToken = Token.TokenComma; ch = getChar(); break;
                 case '.': lexToken = Token.TokenDot; ch = getChar(); break;
                 case '?': lexToken = Token.TokenInterrogation; ch = getChar(); break;
-                case '^': lexToken = Token.TokenBitwiseNot; ch = getChar(); break;
                 case '(': lexToken = Token.TokenOpenParenteses; ch = getChar(); break;
                 case ')': lexToken = Token.TokenCloseParenteses; ch = getChar(); break;
                 case '{': lexToken = Token.TokenOpenCBrackets; ch = getChar(); break;
                 case '}': lexToken = Token.TokenCloseCBrackets; ch = getChar(); break;
                 case '[': lexToken = Token.TokenOpenBrackets; ch = getChar(); break;
                 case ']': lexToken = Token.TokenCloseBrackets; ch = getChar(); break;
-                case '\0': lexToken = Token.TokenEOF; break;
             }
             return new Dictionary<string, string>() {
                 {KEY_LEXEME, lexeme},
