@@ -42,7 +42,7 @@ namespace dart_compiler
                     if (symbol.isComment()) continue;
                     TableSymbol.Insert(symbol);
                 }
-                catch (CommentaryEndOfFile e)
+                catch (CommentaryEndOfFileException e)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine();

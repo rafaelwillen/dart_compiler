@@ -314,7 +314,7 @@ namespace dart_compiler.Core.Scanner
                             if (ch == '\0')
                             {
                                 inComment = false;
-                                throw new CommentaryEndOfFile(commentLineStart);
+                                throw new CommentaryEndOfFileException(commentLineStart);
                             }
                             else if (ch == '*')
                             {
