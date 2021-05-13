@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using dart_compiler.Core.Utils;
+using dart_compiler.Core.ErrorReport;
+using dart_compiler.Core.ErrorReport.ScannerError;
 
 namespace dart_compiler.Core.Scanner
 {
@@ -314,7 +316,7 @@ namespace dart_compiler.Core.Scanner
                             if (ch == '\0')
                             {
                                 inComment = false;
-                                throw new CommentaryEndOfFileException(commentLineStart);
+                                ErrorList.AddError(new CommentaryEndOfFileException(commentLineStart));
                             }
                             else if (ch == '*')
                             {
@@ -372,6 +374,7 @@ namespace dart_compiler.Core.Scanner
                     }
                     else lexToken = Token.TokenBitwiseNot;
                     break;
+                // Analisar string com aspas
                 case '"':
                     int lineDiference = linePointer;
                     string stringLiteral = ch.ToString();
@@ -380,9 +383,10 @@ namespace dart_compiler.Core.Scanner
                     {
                         stringLiteral += ch;
                         ch = getChar();
+                        // Se mudou de linha, então a string não terminou
                         if (linePointer > lineDiference)
                         {
-                            lexToken = Token.TokenInvalid;
+                            ErrorList.AddError(new InvalidStringLiteralException(linePointer, buffer[linePointer - 1]));
                             break;
                         }
                         lexToken = Token.TokenString;
@@ -391,6 +395,7 @@ namespace dart_compiler.Core.Scanner
                     lexeme = stringLiteral;
                     ch = getChar();
                     break;
+                // Analisar string com virgulas altas
                 case '\'':
                     lineDiference = linePointer;
                     stringLiteral = ch.ToString();
@@ -399,9 +404,10 @@ namespace dart_compiler.Core.Scanner
                     {
                         stringLiteral += ch;
                         ch = getChar();
+                        // Se mudou de linha, então a string não terminou
                         if (linePointer > lineDiference)
                         {
-                            lexToken = Token.TokenInvalid;
+                            ErrorList.AddError(new InvalidStringLiteralException(linePointer, buffer[linePointer - 1]));
                             break;
                         }
                         lexToken = Token.TokenString;

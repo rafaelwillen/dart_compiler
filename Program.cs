@@ -3,6 +3,8 @@ using System.IO;
 
 using dart_compiler.Core.Scanner;
 using dart_compiler.Core;
+using dart_compiler.Core.ErrorReport.ScannerError;
+using dart_compiler.Core.ErrorReport;
 
 namespace dart_compiler
 {
@@ -36,20 +38,17 @@ namespace dart_compiler
 
             while (!scanner.EndOfFile)
             {
-                try
-                {
-                    var symbol = scanner.Analex();
-                    if (symbol.isComment()) continue;
-                    TableSymbol.Insert(symbol);
-                }
-                catch (CommentaryEndOfFileException e)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine();
-                    Console.Error.WriteLine(e.Message);
-                    Console.WriteLine();
-                    return;
-                }
+                var symbol = scanner.Analex();
+                if (symbol.isComment()) continue;
+                TableSymbol.Insert(symbol);
+            }
+
+            // Imprime os erros encontrados na etapa do Scanner
+            if (ErrorList.ExistsErrors())
+            {
+                Console.WriteLine("Erro no Scanner");
+                ErrorList.PrintErrors();
+                return;
             }
             TableSymbol.PrintTable();
         }
