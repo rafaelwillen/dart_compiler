@@ -12,6 +12,7 @@ namespace dart_compiler.Core
     {
         // Armazena os símbolos que são criados pelo Scanner do compilador
         private static List<Symbol> symbols = new List<Symbol>();
+        private static int currentSymbolPosition = -1;
 
         /// <summary>
         /// Insere um novo símbolo no fim da tabela de símbolos
@@ -36,6 +37,24 @@ namespace dart_compiler.Core
                 printRow(tableWidth, symbol.Lexeme, symbol.Token.ToString(), symbol.LineOfCode.ToString());
             }
             printLine(tableWidth);
+        }
+
+        public static Symbol GetNextSymbol()
+        {
+            if (currentSymbolPosition == symbols.Count)
+            {
+                throw new IndexOutOfRangeException("There is no more symbols to read on the symbol table");
+            }
+            return symbols[++currentSymbolPosition];
+        }
+
+        public static Symbol GetLastSymbol()
+        {
+            if (currentSymbolPosition == 0)
+            {
+                throw new IndexOutOfRangeException("Reached index -1");
+            }
+            return symbols[--currentSymbolPosition];
         }
 
         private static void printLine(int tableWidth) => Console.WriteLine(new String('-', tableWidth));
