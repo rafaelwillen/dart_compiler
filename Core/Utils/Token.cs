@@ -254,6 +254,10 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenKeywordFalse,
         /// <summary>
+        /// Token palavra reservada "final"
+        /// </summary>
+        TokenKeywordFinal,
+        /// <summary>
         /// Token palavra reservada "finally"
         /// </summary>
         TokenKeywordFinally,
