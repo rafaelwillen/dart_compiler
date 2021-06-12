@@ -37,6 +37,20 @@ namespace dart_compiler.Core.Utils
         /// <returns>true se for um comentário</returns>
         public bool isComment() => Token == Token.TokenComment;
 
+        /// <summary>
+        /// Verifica se este símbolo é um tipo de dados
+        /// Tipos de dados aceites: int, double, String, dynamic, Object, List e Map
+        /// </summary>
+        /// <returns>true se for um tipo de dados</returns>
+        public bool isDataType()
+        {
+            string[] dataTypes = {
+                "int", "double", "String", "dynamic", "Object", "List", "Map"
+            };
+
+            return Array.Exists<string>(dataTypes, (dataType) => dataType == Lexeme);
+        }
+
         public override string ToString()
         {
             return $"{this.Token} : {Lexeme} at line {LineOfCode}";
