@@ -171,38 +171,5 @@ namespace dart_compiler.Core.Parser
         }
         #endregion
 
-        /*
-            S --> Az | z
-            A --> xA | B
-            B --> y
-        */
-
-        // private void S()
-        // {
-        //     if (symbol.Lexeme == "z") readNextSymbol();
-        //     else
-        //     {
-        //         A();
-        //         if (symbol.Lexeme != "z") error("Z expected");
-        //         else readNextSymbol();
-        //     }
-        //     Console.WriteLine("Sucesss!");
-        // }
-
-        // private void A()
-        // {
-        //     if (symbol.Lexeme == "x")
-        //     {
-        //         readNextSymbol();
-        //         A();
-        //     }
-        //     else B();
-        // }
-
-        // private void B()
-        // {
-        //     if (symbol.Lexeme == "y") readNextSymbol();
-        //     else error("Y expected");
-        // }
     }
 }
