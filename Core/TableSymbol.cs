@@ -52,6 +52,16 @@ namespace dart_compiler.Core
             return symbols[++currentSymbolPosition];
         }
 
+        public static Symbol GetLastSymbol()
+        {
+            if (currentSymbolPosition == 0)
+            {
+                throw new IndexOutOfRangeException("Reached index -1");
+            }
+            return symbols[--currentSymbolPosition];
+        }
+
+
         /// <summary>
         /// Verifica se ainda existem símbolos a serem lidos
         /// </summary>
