@@ -95,7 +95,6 @@ namespace dart_compiler.Core.Scanner
                     ch = getChar();
                 }
                 // Se o último character do value não for um dígito, é um erro
-                // This throws an exception :(
                 if (value.EndsWith('.')) ErrorList.AddError(
                     new InvalidFloatingPointException(
                         linePointer,
