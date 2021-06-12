@@ -36,5 +36,10 @@ namespace dart_compiler.Core.Utils
         ///</summary>
         /// <returns>true se for um comentário</returns>
         public bool isComment() => Token == Token.TokenComment;
+
+        public override string ToString()
+        {
+            return $"{this.Token} : {Lexeme} at line {LineOfCode}";
+        }
     }
 }

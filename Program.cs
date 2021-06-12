@@ -3,8 +3,8 @@ using System.IO;
 
 using dart_compiler.Core.Scanner;
 using dart_compiler.Core;
-using dart_compiler.Core.ErrorReport.ScannerError;
 using dart_compiler.Core.ErrorReport;
+using dart_compiler.Core.Parser;
 
 namespace dart_compiler
 {
@@ -51,6 +51,8 @@ namespace dart_compiler
                 return;
             }
             TableSymbol.PrintTable();
+            Parser parser = new Parser();
+            parser.Parse();
         }
     }
 }
