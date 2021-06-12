@@ -334,30 +334,6 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenKeywordWith,
         /// <summary>
-        /// Token palavra reservada "int"
-        /// </summary>
-        TokenKeywordInt,
-        /// <summary>
-        /// Token palavra reservada "double"
-        /// </summary>
-        TokenKeywordDouble,
-        /// <summary>
-        /// Token palavra reservada "List"
-        /// </summary>
-        TokenKeywordList,
-        /// <summary>
-        /// Token palavra reservada "Map"
-        /// </summary>
-        TokenKeywordMap,
-        /// <summary>
-        /// Token palavra reservada "String"
-        /// </summary>
-        TokenKeywordString,
-        /// <summary>
-        /// Token palavra reservada "Object"
-        /// </summary>
-        TokenKeywordObject,
-        /// <summary>
         /// Token palavra reservada "dynamic"
         /// </summary>
         TokenKeywordDynamic,
