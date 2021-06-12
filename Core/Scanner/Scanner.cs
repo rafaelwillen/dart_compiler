@@ -50,6 +50,7 @@ namespace dart_compiler.Core.Scanner
             // Verificar tokens de dois ou três caracteres
             result = verifyCharacterToken();
             Enum.TryParse(result[KEY_TOKEN], out lexToken);
+            if (result[KEY_TOKEN] != Token.TokenInvalid.ToString()) return new Symbol(result[KEY_LEXEME], lexToken, linePointer + 1);
             // Verificar token identificador ou keyword
             if (isLetter(ch) || ch == '$' || ch == '_')
             {
