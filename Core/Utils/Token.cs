@@ -202,6 +202,14 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenComment,
         /// <summary>
+        /// Token palavra reservada "async"
+        /// </summary>
+        TokenKeywordAsync,
+        /// <summary>
+        /// Token palavra reservada "await"
+        /// </summary>
+        TokenKeywordAwait,
+        /// <summary>
         /// Token palavra reservada "assert"
         /// </summary>
         TokenKeywordAssert,
