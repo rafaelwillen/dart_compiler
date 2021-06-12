@@ -86,15 +86,22 @@ namespace dart_compiler.Core.Scanner
             // Verificar token inteiro ou hexadecimal
             if (isDigit(ch))
             {
-                // TODO: Reconhecer números hexadecimais
-                int value = 0;
-                while (isDigit(ch))
+                string value = string.Empty;
+                bool isFloatingPoint = true;
+                while (isDigit(ch) || (ch == '.' && isFloatingPoint))
                 {
-                    value = value * 10 + ch - '0';
+                    if (ch == '.') isFloatingPoint = false;
+                    value += ch;
                     ch = getChar();
                 }
-                result[KEY_LEXEME] = value.ToString();
-                lexToken = Token.TokenInteger;
+                // Se o último character do value não for um dígito, é um erro
+                if (value.EndsWith('.')) ErrorList.AddError(
+                    new InvalidFloatingPointException(
+                        linePointer,
+                        buffer[linePointer]));
+                result[KEY_LEXEME] = value;
+                lexToken = value.Contains(".")
+                ? Token.TokenFloatingPoint : Token.TokenInteger;
             }
 
             if (lexToken == Token.TokenInvalid)
