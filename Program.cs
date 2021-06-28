@@ -28,16 +28,15 @@ namespace dart_compiler
 
             if (args[0] == "-h")
             {
-                Console.WriteLine("Mini Compilador de dart");
+                Console.WriteLine("Mini Compilador de Dart");
                 Console.WriteLine("DartCompiler <caminho_ficheiro> --> Compila o ficheiro");
-                Console.WriteLine("DartCompiler -h --> Lista de comandos do DartCompiler");
-                Console.WriteLine("DartCompiler <código_fonte> -f --> Compila o código fonte e armazena os resultados em um ficheiro de saída a.txt");
-                Console.WriteLine("DartCompiler <código_fonte> -f <ficheiro_saida> --> Compila o código fonte e armazena os resultados em um ficheiro de saída");
+                Console.WriteLine("DartCompiler -h --> Lista os comandos do DartCompiler");
                 Console.WriteLine("DartCompiler <código_fonte> -s --> Compila o código fonte e imprime apenas a tabela de símbolos do Scanner");
                 Console.WriteLine("DartCompiler <código_fonte> --scanner --> Compila o código fonte e imprime apenas a tabela de símbolos do Scanner");
                 return;
             }
             string filePath = args[0];
+            bool showScannerOutput = args.Length == 2 && (args[1] == "-s" || args[1] == "--scanner");
 
             Scanner scanner;
             try
@@ -64,7 +63,8 @@ namespace dart_compiler
                 ErrorList.PrintErrors();
                 return;
             }
-            TableSymbol.PrintTable();
+            if (showScannerOutput)
+                TableSymbol.PrintTable();
             Parser parser = new Parser();
             parser.Parse();
         }
