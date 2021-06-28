@@ -10,6 +10,7 @@ namespace dart_compiler
 {
     class Program
     {
+        const int MAX_ARGS_COUNT = 2;
         static void Main(string[] args)
         {
             switch (args.Length)
@@ -18,12 +19,24 @@ namespace dart_compiler
                     Console.WriteLine("Erro fatal: Não existe o ficheiro de entrada");
                     Console.WriteLine("Uso: DartCompiler <caminho_ficheiro>");
                     return;
-                case > 1:
+                case > MAX_ARGS_COUNT:
                     Console.WriteLine("Demasiados argumentos");
                     Console.WriteLine("Uso: DartCompiler <caminho_ficheiro>");
                     return;
             }
+
+
+            if (args[0] == "-h")
+            {
+                Console.WriteLine("Mini Compilador de Dart");
+                Console.WriteLine("DartCompiler <caminho_ficheiro> --> Compila o ficheiro");
+                Console.WriteLine("DartCompiler -h --> Lista os comandos do DartCompiler");
+                Console.WriteLine("DartCompiler <código_fonte> -s --> Compila o código fonte e imprime apenas a tabela de símbolos do Scanner");
+                Console.WriteLine("DartCompiler <código_fonte> --scanner --> Compila o código fonte e imprime apenas a tabela de símbolos do Scanner");
+                return;
+            }
             string filePath = args[0];
+            bool showScannerOutput = args.Length == 2 && (args[1] == "-s" || args[1] == "--scanner");
 
             Scanner scanner;
             try
@@ -50,7 +63,8 @@ namespace dart_compiler
                 ErrorList.PrintErrors();
                 return;
             }
-            TableSymbol.PrintTable();
+            if (showScannerOutput)
+                TableSymbol.PrintTable();
             Parser parser = new Parser();
             parser.Parse();
         }
