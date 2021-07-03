@@ -4,25 +4,25 @@ using System.IO;
 using dart_compiler.Core.Scanner;
 using dart_compiler.Core;
 using dart_compiler.Core.ErrorReport;
-using dart_compiler.Core.Parser;
+// using dart_compiler.Core.Parser;
 
 namespace dart_compiler
 {
     class Program
     {
         const int MAX_ARGS_COUNT = 2;
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             switch (args.Length)
             {
                 case < 1:
                     Console.WriteLine("Erro fatal: Não existe o ficheiro de entrada");
                     Console.WriteLine("Uso: DartCompiler <caminho_ficheiro>");
-                    return;
+                    return -1;
                 case > MAX_ARGS_COUNT:
                     Console.WriteLine("Demasiados argumentos");
                     Console.WriteLine("Uso: DartCompiler <caminho_ficheiro>");
-                    return;
+                    return -1;
             }
 
 
@@ -33,7 +33,7 @@ namespace dart_compiler
                 Console.WriteLine("DartCompiler -h --> Lista os comandos do DartCompiler");
                 Console.WriteLine("DartCompiler <código_fonte> -s --> Compila o código fonte e imprime apenas a tabela de símbolos do Scanner");
                 Console.WriteLine("DartCompiler <código_fonte> --scanner --> Compila o código fonte e imprime apenas a tabela de símbolos do Scanner");
-                return;
+                return 0;
             }
             string filePath = args[0];
             bool showScannerOutput = args.Length == 2 && (args[1] == "-s" || args[1] == "--scanner");
@@ -46,7 +46,7 @@ namespace dart_compiler
             catch (FileNotFoundException e)
             {
                 System.Console.WriteLine($"Erro Fatal: Não foi possível encontrar o ficheiro {e.FileName}");
-                return;
+                return -1;
             }
 
             while (!scanner.EndOfFile)
@@ -61,12 +61,11 @@ namespace dart_compiler
             {
                 Console.WriteLine("Erro no Scanner");
                 ErrorList.PrintErrors();
-                return;
+                return 0;
             }
             if (showScannerOutput)
                 TableSymbol.PrintTable();
-            Parser parser = new Parser();
-            parser.Parse();
+            return 0;
         }
     }
 }
