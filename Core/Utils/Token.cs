@@ -262,6 +262,10 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenKeywordExtends,
         /// <summary>
+        /// Token palavra reservada "implements"
+        /// </summary>
+        TokenKeywordImplements,
+        /// <summary>
         /// Token palavra reservada "false"
         /// </summary>
         TokenKeywordFalse,

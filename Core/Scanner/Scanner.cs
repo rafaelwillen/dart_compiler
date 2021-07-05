@@ -474,7 +474,7 @@ namespace dart_compiler.Core.Scanner
                 "default", "do", "else", "enum", "extends", "false", "final", "finally",
                 "for", "if", "in", "is", "new", "null", "rethrow", "return", "super",
                 "switch", "this", "throw", "true", "try", "var", "void", "while", "with",
-                 "Object", "dynamic", "import", "async", "await"
+                 "Object", "dynamic", "import", "async", "await", "implements"
             };
             Array.Sort(keywords);
             return Array.BinarySearch(keywords, identifier) >= 0;
