@@ -25,6 +25,30 @@ namespace dart_compiler.Core.Parser
             {
                 symbol = functionParser.StartParsing(symbol);
             }
+            else if (symbol.Token == Token.TokenKeywordImport)
+            {
+                libraryImport();
+            }
+        }
+
+        private void libraryImport()
+        {
+            readNextSymbol();
+            if (symbol.Token == Token.TokenString)
+            {
+                readNextSymbol();
+            }
+            else
+            {
+                error("Esperava uma URL ou string");
+            }
+
+            if (symbol.Token == Token.TokenEndStatement)
+            {
+                readNextSymbol();
+                return;
+            }
+            error("Esperava ';'");
         }
     }
 }
