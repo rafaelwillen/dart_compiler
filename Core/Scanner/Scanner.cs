@@ -444,6 +444,7 @@ namespace dart_compiler.Core.Scanner
             string lexeme = ch.ToString();
             switch (ch)
             {
+                case ':': lexToken = Token.TokenColon; ch = getChar(); break;
                 case ';': lexToken = Token.TokenEndStatement; ch = getChar(); break;
                 case ',': lexToken = Token.TokenComma; ch = getChar(); break;
                 case '.': lexToken = Token.TokenDot; ch = getChar(); break;
