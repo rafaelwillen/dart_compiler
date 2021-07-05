@@ -258,6 +258,18 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenKeywordEnum,
         /// <summary>
+        /// Token palavra reservada "static"
+        /// </summary>
+        TokenKeywordStatic,
+                /// <summary>
+        /// Token palavra reservada "get"
+        /// </summary>
+        TokenKeywordGet,
+                /// <summary>
+        /// Token palavra reservada "set"
+        /// </summary>
+        TokenKeywordSet,
+        /// <summary>
         /// Token palavra reservada "extends"
         /// </summary>
         TokenKeywordExtends,
