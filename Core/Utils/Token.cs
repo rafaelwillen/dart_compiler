@@ -14,6 +14,10 @@ namespace dart_compiler.Core.Utils
         /// </summary>
         TokenInteger,
         /// <summary>
+        /// Token dois pontos (:)
+        /// </summary>
+        TokenColon,
+        /// <summary>
         /// Token constante string
         /// </summary>
         TokenString,
