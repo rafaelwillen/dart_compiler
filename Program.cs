@@ -4,6 +4,7 @@ using System.IO;
 using dart_compiler.Core.Scanner;
 using dart_compiler.Core;
 using dart_compiler.Core.ErrorReport;
+using dart_compiler.Core.Parser;
 // using dart_compiler.Core.Parser;
 
 namespace dart_compiler
@@ -63,8 +64,13 @@ namespace dart_compiler
                 ErrorList.PrintErrors();
                 return 0;
             }
+            Parser parser = new Parser();
             if (showScannerOutput)
                 TableSymbol.PrintTable();
+            while (TableSymbol.HasNextSymbol())
+            {
+                parser.StartParsing(null);
+            }
             return 0;
         }
     }
