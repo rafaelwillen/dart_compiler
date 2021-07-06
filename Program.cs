@@ -73,5 +73,5 @@ namespace dart_compiler
             }
             return 0;
         }
-    }
+}
 }

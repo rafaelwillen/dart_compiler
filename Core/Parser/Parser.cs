@@ -7,9 +7,11 @@ namespace dart_compiler.Core.Parser
     public class Parser : AbstractParser
     {
         private FunctionParser functionParser;
+        // private ClassParser classParser;
         public Parser()
         {
             functionParser = new FunctionParser();
+            // classParser = new ClassParser();
             readNextSymbol();
         }
 
@@ -28,6 +30,10 @@ namespace dart_compiler.Core.Parser
             else if (symbol.Token == Token.TokenKeywordImport)
             {
                 libraryImport();
+            }
+            else if (symbol.Token == Token.TokenKeywordClass)
+            {
+                // symbol = classParser.StartParsing(symbol);
             }
         }
 

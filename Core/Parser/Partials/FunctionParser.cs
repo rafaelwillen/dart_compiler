@@ -4,12 +4,34 @@ namespace dart_compiler.Core.Parser.Partials
 {
     public class FunctionParser : AbstractParser
     {
+        private StatementsParser statementsParser;
 
         public override Symbol StartParsing(Symbol startSymbol)
         {
             symbol = startSymbol;
             functionDefinition();
             return symbol;
+        }
+
+        public Symbol ParseFunctionSignature(Symbol symbol)
+        {
+            this.symbol = symbol;
+            functionSignature();
+            return this.symbol;
+        }
+
+        public Symbol ParseFunctionBody(Symbol symbol)
+        {
+            this.symbol = symbol;
+            functionBodyA();
+            return this.symbol;
+        }
+
+        public Symbol ParseBlock(Symbol symbol)
+        {
+            this.symbol = symbol;
+            block();
+            return this.symbol;
         }
 
         private void functionDefinition()
@@ -67,8 +89,8 @@ namespace dart_compiler.Core.Parser.Partials
             {
                 error("Esperava um '{'");
             }
-
-            // TODO: Parse <statements>
+            statementsParser = new StatementsParser();
+            symbol = statementsParser.ParseStatements(symbol);
             if (symbol.Token == Token.TokenCloseCBrackets)
             {
                 readNextSymbol();
@@ -116,7 +138,7 @@ namespace dart_compiler.Core.Parser.Partials
                 return;
             }
             normalParameters();
-            if (symbol.Token == Token.TokenOpenParenteses)
+            if (symbol.Token == Token.TokenCloseParenteses)
             {
                 readNextSymbol();
                 return;

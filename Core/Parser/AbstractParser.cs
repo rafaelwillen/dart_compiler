@@ -13,8 +13,7 @@ namespace dart_compiler.Core.Parser
 
         protected void error(string message)
         {
-            Console.WriteLine($"Erro - encontrado caracter {symbol.Token} - {message} at line {symbol.LineOfCode}");
-            Console.ReadLine();
+            Console.WriteLine($"Erro - encontrado caracter {symbol.Token} - {message} na linha {symbol.LineOfCode}");
         }
 
         public abstract Symbol StartParsing(Symbol startSymbol);
