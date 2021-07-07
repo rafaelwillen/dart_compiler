@@ -16,7 +16,7 @@ namespace dart_compiler.Core.Parser.Partials
         public Symbol ParseInitializedVariableDeclaration(Symbol startSymbol)
         {
             symbol = startSymbol;
-            initializedIdentifier();
+            initializedVariableDeclaration();
             return symbol;
         }
 
@@ -46,7 +46,8 @@ namespace dart_compiler.Core.Parser.Partials
             if (symbol.Token == Token.TokenKeywordFinal || symbol.Token == Token.TokenKeywordConst)
             {
                 readNextSymbol();
-                // Parse type optionally
+                var statementParser = new StatementsParser();
+                statementParser.ParseType(symbol);
             }
             else if (symbol.Token == Token.TokenKeywordVar)
             {
@@ -69,7 +70,7 @@ namespace dart_compiler.Core.Parser.Partials
                 // TODO: Parse <expression>
             }
 
-            while (symbol.Token != Token.TokenComma)
+            while (symbol.Token == Token.TokenComma)
             {
                 readNextSymbol();
                 initializedIdentifier();

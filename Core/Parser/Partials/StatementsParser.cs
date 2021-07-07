@@ -82,6 +82,9 @@ namespace dart_compiler.Core.Parser.Partials
                     // tryStatement();
                     break;
                 case Token.TokenID:
+                case Token.TokenKeywordConst:
+                case Token.TokenKeywordFinal:
+                case Token.TokenKeywordVar:
                     localVarDeclaration();
                     break;
                 // FIXME: Change check the first terminal o fhe expressionStatement, 
@@ -213,6 +216,7 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void forInitStatement()
         {
+            localVarDeclaration();
             // TODO: Parse localVarDeclaration
             // TODO: Parse expression
             if (symbol.Token == Token.TokenEndStatement)
