@@ -94,7 +94,8 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void localVarDeclaration()
         {
-            // TODO: Parse initializedVariableDeclaration
+            VariablesParser variableParser = new VariablesParser();
+            symbol = variableParser.ParseInitializedVariableDeclaration(symbol);
             if (symbol.Token == Token.TokenEndStatement)
             {
                 readNextSymbol();
