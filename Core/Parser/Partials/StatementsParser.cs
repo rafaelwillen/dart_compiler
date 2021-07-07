@@ -19,6 +19,13 @@ namespace dart_compiler.Core.Parser.Partials
             return symbol;
         }
 
+        public Symbol ParseType(Symbol startSymbol)
+        {
+            symbol = startSymbol;
+            type();
+            return symbol;
+        }
+
         private void statements()
         {
             while (symbol.Token != Token.TokenCloseCBrackets && symbol.Token != Token.TokenEndStatement
