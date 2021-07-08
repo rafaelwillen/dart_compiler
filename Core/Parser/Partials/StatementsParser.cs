@@ -138,7 +138,13 @@ namespace dart_compiler.Core.Parser.Partials
         private void returnStatement()
         {
             readNextSymbol();
-            // TODO: Parse expression optionally
+            if (symbol.Token == Token.TokenEndStatement)
+            {
+                readNextSymbol();
+                return;
+            }
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenEndStatement)
             {
                 readNextSymbol();
@@ -151,7 +157,13 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void expressionStatement()
         {
-            // TODO: Parse expression optionally
+            if (symbol.Token == Token.TokenEndStatement)
+            {
+                readNextSymbol();
+                return;
+            }
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenEndStatement)
             {
                 readNextSymbol();
@@ -203,25 +215,40 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void forLoopParts()
         {
+            var expressionParser = new ExpressionParser();
             forInitStatement();
-            // TODO: Parse expression optionally
             if (symbol.Token == Token.TokenEndStatement)
+            {
                 readNextSymbol();
+            }
             else
-                error("Ciclo 'for' incompleto");
-            // TODO: Parse expression optionally
+            {
+                symbol = expressionParser.StartParsing(symbol);
+                if (symbol.Token == Token.TokenEndStatement)
+                    readNextSymbol();
+                else
+                    error("Ciclo 'for' incompleto");
+            }
+            if (symbol.Token == Token.TokenCloseParenteses)
+                return;
+            symbol = expressionParser.ParseExpressions(symbol);
 
             // For each is not implemented
         }
 
         private void forInitStatement()
         {
-            localVarDeclaration();
-            // TODO: Parse localVarDeclaration
-            // TODO: Parse expression
-            if (symbol.Token == Token.TokenEndStatement)
-                readNextSymbol();
-            else error("Esperava um ';'");
+
+            if (symbol.Token == Token.TokenKeywordFinal || symbol.Token == Token.TokenKeywordConst || symbol.Token == Token.TokenKeywordVar || symbol.Token == Token.TokenID)
+                localVarDeclaration();
+            else
+            {
+                var expressionParser = new ExpressionParser();
+                symbol = expressionParser.StartParsing(symbol);
+                if (symbol.Token == Token.TokenEndStatement)
+                    readNextSymbol();
+                else error("Esperava um ';'");
+            }
         }
         #endregion
 
@@ -233,7 +260,8 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
             else
                 error("Esperava um '('");
-            // TODO: Parse expression
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenCloseParenteses)
                 readNextSymbol();
             else
@@ -255,7 +283,8 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
             else
                 error("Esperava um '('");
-            // TODO: Parse expression optionally
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenCloseParenteses)
                 readNextSymbol();
             else
@@ -275,7 +304,8 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
             else
                 error("Esperava um '('");
-            // TODO: Parse expression optionally
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenCloseParenteses)
                 readNextSymbol();
             else
@@ -301,7 +331,8 @@ namespace dart_compiler.Core.Parser.Partials
             if (symbol.Token == Token.TokenKeywordCase)
                 readNextSymbol();
             else error("Esperava um 'case'");
-            // TODO: Parse expression
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenColon)
                 readNextSymbol();
             else error("Esperava um ':'");
@@ -328,7 +359,8 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
             else
                 error("Esperava um '('");
-            // TODO: Parse expression
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
             if (symbol.Token == Token.TokenCloseParenteses)
                 readNextSymbol();
             else
@@ -377,7 +409,8 @@ namespace dart_compiler.Core.Parser.Partials
             if (symbol.Token == Token.TokenAssignment)
                 readNextSymbol();
             else error("Esperava o operador de atribuição");
-            // TODO: Parse expression
+            var expressionParser = new ExpressionParser();
+            symbol = expressionParser.StartParsing(symbol);
         }
         #endregion
 

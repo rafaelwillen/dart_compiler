@@ -58,7 +58,8 @@ namespace dart_compiler.Core.Parser.Partials
                 if (symbol.Token == Token.TokenGreater)
                 {
                     readNextSymbol();
-                    // TODO: Parse <expression>
+                    var expressionParser = new ExpressionParser();
+                    symbol = expressionParser.StartParsing(symbol);
                     if (symbol.Token == Token.TokenEndStatement)
                     {
                         readNextSymbol();

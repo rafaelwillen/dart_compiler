@@ -67,7 +67,8 @@ namespace dart_compiler.Core.Parser.Partials
             if (symbol.Token == Token.TokenAssignment)
             {
                 readNextSymbol();
-                // TODO: Parse <expression>
+                var expressionParser = new ExpressionParser();
+                symbol = expressionParser.StartParsing(symbol);
             }
 
             while (symbol.Token == Token.TokenComma)
