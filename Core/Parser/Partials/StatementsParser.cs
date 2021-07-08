@@ -81,7 +81,6 @@ namespace dart_compiler.Core.Parser.Partials
                 case Token.TokenKeywordTry:
                     // tryStatement();
                     break;
-                case Token.TokenID:
                 case Token.TokenKeywordConst:
                 case Token.TokenKeywordFinal:
                 case Token.TokenKeywordVar:
@@ -90,7 +89,10 @@ namespace dart_compiler.Core.Parser.Partials
                 // FIXME: Change check the first terminal o fhe expressionStatement, 
                 // it's causing bugs
                 default:
-                    expressionStatement();
+                    if (symbol.isDataType())
+                        localVarDeclaration();
+                    else
+                        expressionStatement();
                     break;
             }
         }
