@@ -22,10 +22,33 @@ namespace dart_compiler.Core.Parser.Partials
         {
             if (symbol.Token == Token.TokenKeywordThrow)
                 throwExpression();
-            // TODO: Check the conditionalExpression
-            assignableExpression();
-            assignmentOperator();
-            expression();
+            else
+            {
+                switch (symbol.Token)
+                {
+                    case Token.TokenSubtraction:
+                    case Token.TokenNot:
+                    case Token.TokenKeywordAwait:
+                    case Token.TokenKeywordThis:
+                    case Token.TokenKeywordNew:
+                    case Token.TokenOpenParenteses:
+                        conditionalExpression();
+                        break;
+                    default:
+                        if (isLiteral(symbol.Token))
+                            conditionalExpression();
+                        else
+                        {
+                            assignableExpression();
+                            if (symbol.Token == Token.TokenEndStatement)
+                                return;
+                            if (isAssignmentOperator(symbol.Token))
+                                assignmentOperator();
+                            expression();
+                        }
+                        break;
+                }
+            }
         }
 
         private void expressions()
@@ -57,7 +80,7 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void conditionalExpression()
         {
-            // TODO: Parse logicalOrExpression
+            logicalOrExpression();
 
             if (symbol.Token == Token.TokenInterrogation)
             {
@@ -150,7 +173,10 @@ namespace dart_compiler.Core.Parser.Partials
             if (symbol.Token == Token.TokenOpenParenteses)
                 readNextSymbol();
             else
+            {
                 error("Esperava um '('");
+                return;
+            }
             if (symbol.Token == Token.TokenCloseParenteses)
             {
                 readNextSymbol();
@@ -392,7 +418,7 @@ namespace dart_compiler.Core.Parser.Partials
         private void shiftExpression()
         {
             additiveExpression();
-            if (symbol.Token == Token.TokenLeftShift || symbol.Token == Token.TokenRightShift)
+            while (symbol.Token == Token.TokenLeftShift || symbol.Token == Token.TokenRightShift)
             {
                 readNextSymbol();
                 additiveExpression();
@@ -404,10 +430,10 @@ namespace dart_compiler.Core.Parser.Partials
         private void additiveExpression()
         {
             multiplicativeExpression();
-            if (symbol.Token == Token.TokenAdition || symbol.Token == Token.TokenSubtraction)
+            while (symbol.Token == Token.TokenAdition || symbol.Token == Token.TokenSubtraction)
             {
                 readNextSymbol();
-                multiplicativeOperator();
+                multiplicativeExpression();
             }
         }
 
@@ -439,17 +465,50 @@ namespace dart_compiler.Core.Parser.Partials
                 prefixOperator();
                 unaryExpression();
             }
+            else if (isLiteral(symbol.Token) || symbol.Token == Token.TokenKeywordThis || symbol.Token == Token.TokenKeywordNew || symbol.Token == Token.TokenOpenParenteses || symbol.Token == Token.TokenID)
+            {
+                postfixExpression();
+            }
+            else
+            {
+                selector();
+            }
         }
 
-        // TODO: Parse postfixExpression
+        private void postfixExpression()
+        {
+            if (symbol.Token == Token.TokenID)
+            {
+                assignableExpression();
+                incrementOperator();
+            }
+            else
+            {
+                primary();
+                while (symbol.Token == Token.TokenOpenParenteses || symbol.Token == Token.TokenOpenBrackets)
+                {
+                    selector();
+                }
+            }
+        }
 
-        // TODO: Parse selector
+        private void selector()
+        {
+            if (symbol.Token == Token.TokenOpenParenteses)
+            {
+                assignableExpression();
+            }
+            else
+            {
+                arguments();
+            }
+        }
         #endregion
         #endregion
 
         #region Literals
 
-        private bool isLiteral(Token token) => isBooleanLiteral(token) || isNumericLiteral(token) || symbol.Token == Token.TokenKeywordNull || symbol.Token == Token.TokenString || symbol.Token == Token.TokenOpenCBrackets || symbol.Token == Token.TokenOpenParenteses;
+        private bool isLiteral(Token token) => isBooleanLiteral(token) || isNumericLiteral(token) || symbol.Token == Token.TokenKeywordNull || symbol.Token == Token.TokenString || symbol.Token == Token.TokenOpenCBrackets || symbol.Token == Token.TokenOpenBrackets;
         private void literal()
         {
             if (symbol.Token == Token.TokenKeywordNull)
@@ -462,7 +521,7 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
             else if (symbol.Token == Token.TokenOpenCBrackets)
                 mapLiteral();
-            else if (symbol.Token == Token.TokenOpenParenteses)
+            else if (symbol.Token == Token.TokenOpenBrackets)
                 listLiteral();
             else
                 error("Esperava um literal");

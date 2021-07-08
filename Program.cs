@@ -57,13 +57,12 @@ namespace dart_compiler
                 TableSymbol.Insert(symbol);
             }
 
-            // Imprime os erros encontrados na etapa do Scanner
             if (ErrorList.ExistsErrors())
             {
-                Console.WriteLine("Erro no Scanner");
                 ErrorList.PrintErrors();
-                return 0;
+                return -1;
             }
+
             Parser parser = new Parser();
             if (showScannerOutput)
                 TableSymbol.PrintTable();
@@ -71,7 +70,18 @@ namespace dart_compiler
             {
                 parser.StartParsing(null);
             }
+
+            // Imprime os erros encontrados
+            if (ErrorList.ExistsErrors())
+            {
+                ErrorList.PrintErrors();
+                return -1;
+            }
+            else
+            {
+                Console.WriteLine("Compilado com sucesso!");
+            }
             return 0;
         }
-}
+    }
 }
