@@ -20,34 +20,24 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void expression()
         {
+
             if (symbol.Token == Token.TokenKeywordThrow)
                 throwExpression();
+            else if (symbol.Token == Token.TokenID)
+            {
+                readNextSymbol();
+            }
+
+            if (symbol.Token == Token.TokenKeywordThis || symbol.Token == Token.TokenKeywordNew || symbol.Token == Token.TokenOpenParenteses || isAssignmentOperator(symbol.Token))
+            {
+                // assignableExpression();
+                primary();
+                assignmentOperator();
+                expression();
+            }
             else
             {
-                switch (symbol.Token)
-                {
-                    case Token.TokenSubtraction:
-                    case Token.TokenNot:
-                    case Token.TokenKeywordAwait:
-                    case Token.TokenKeywordThis:
-                    case Token.TokenKeywordNew:
-                    case Token.TokenOpenParenteses:
-                        conditionalExpression();
-                        break;
-                    default:
-                        if (isLiteral(symbol.Token))
-                            conditionalExpression();
-                        else
-                        {
-                            assignableExpression();
-                            if (symbol.Token == Token.TokenEndStatement)
-                                return;
-                            if (isAssignmentOperator(symbol.Token))
-                                assignmentOperator();
-                            expression();
-                        }
-                        break;
-                }
+                conditionalExpression();
             }
         }
 
@@ -63,19 +53,7 @@ namespace dart_compiler.Core.Parser.Partials
 
         private void assignableExpression()
         {
-            if (symbol.Token == Token.TokenID)
-            {
-                readNextSymbol();
-            }
-            else
-            {
-                primary();
-                assignableSelector();
-                // while (symbol.Token == Token.TokenOpenBrackets)
-                // {
-                //     assignableSelector();
-                // }
-            }
+
         }
 
         private void conditionalExpression()
@@ -89,7 +67,7 @@ namespace dart_compiler.Core.Parser.Partials
                 if (symbol.Token == Token.TokenColon)
                     readNextSymbol();
                 else
-                    error("Operador condicional inválido, esperava ':'");
+                    error("Operador ternário inválido, esperava ':'");
                 expression();
             }
         }
@@ -107,8 +85,6 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
                 return;
             }
-            else if (isLiteral(symbol.Token))
-                literal();
             else if (symbol.Token == Token.TokenKeywordNew)
             {
                 newExpression();
@@ -116,13 +92,16 @@ namespace dart_compiler.Core.Parser.Partials
             else if (symbol.Token == Token.TokenOpenParenteses)
             {
                 readNextSymbol();
+                if (symbol.Token == Token.TokenCloseParenteses)
+                {
+                    readNextSymbol();
+                    return;
+                }
                 expression();
                 if (symbol.Token == Token.TokenCloseParenteses)
                     readNextSymbol();
                 else error("Esperava um ')'");
             }
-            else
-                functionExpression();
         }
 
         private void assignableSelector()
@@ -459,19 +438,16 @@ namespace dart_compiler.Core.Parser.Partials
             else if (symbol.Token == Token.TokenIncrement || symbol.Token == Token.TokenDecrement)
             {
                 incrementOperator();
+                primary();
             }
             else if (symbol.Token == Token.TokenSubtraction || symbol.Token == Token.TokenNot)
             {
                 prefixOperator();
                 unaryExpression();
             }
-            else if (isLiteral(symbol.Token) || symbol.Token == Token.TokenKeywordThis || symbol.Token == Token.TokenKeywordNew || symbol.Token == Token.TokenOpenParenteses || symbol.Token == Token.TokenID)
+            else if (isLiteral(symbol.Token))
             {
-                postfixExpression();
-            }
-            else
-            {
-                selector();
+                literal();
             }
         }
 
