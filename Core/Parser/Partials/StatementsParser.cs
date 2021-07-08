@@ -86,14 +86,16 @@ namespace dart_compiler.Core.Parser.Partials
                 case Token.TokenKeywordVar:
                     localVarDeclaration();
                     break;
-                // FIXME: Change check the first terminal o fhe expressionStatement, 
-                // it's causing bugs
                 default:
                     if (symbol.isDataType())
                         localVarDeclaration();
                     else
                         expressionStatement();
                     break;
+            }
+            if (symbol.Token != Token.TokenCloseCBrackets)
+            {
+                error("Esperava um '}'");
             }
         }
 
