@@ -47,7 +47,7 @@ namespace dart_compiler.Core.Parser.Partials
             {
                 readNextSymbol();
                 var statementParser = new StatementsParser();
-                statementParser.ParseType(symbol);
+                symbol = statementParser.ParseType(symbol);
             }
             else if (symbol.Token == Token.TokenKeywordVar)
             {
