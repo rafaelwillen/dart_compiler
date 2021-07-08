@@ -34,6 +34,13 @@ namespace dart_compiler.Core.Parser.Partials
             return this.symbol;
         }
 
+        public Symbol ParseFormalParameter(Symbol symbol)
+        {
+            this.symbol = symbol;
+            formalParameterA();
+            return this.symbol;
+        }
+
         private void functionDefinition()
         {
             functionSignature();
