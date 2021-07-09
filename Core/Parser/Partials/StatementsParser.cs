@@ -65,18 +65,35 @@ namespace dart_compiler.Core.Parser.Partials
                 case Token.TokenKeywordFor:
                 case Token.TokenKeywordAwait:
                     forStatement();
+                    if (symbol.Token != Token.TokenCloseCBrackets)
+                    {
+                        error("Esperava um '}'");
+                    }
                     break;
                 case Token.TokenKeywordWhile:
                     whileStatement();
+                    if (symbol.Token != Token.TokenCloseCBrackets)
+                    {
+                        error("Esperava um '}'");
+                    }
                     break;
                 case Token.TokenKeywordDo:
                     doStatement();
+
                     break;
                 case Token.TokenKeywordSwitch:
                     switchStatement();
+                    if (symbol.Token != Token.TokenCloseCBrackets)
+                    {
+                        error("Esperava um '}'");
+                    }
                     break;
                 case Token.TokenKeywordIf:
                     ifStatement();
+                    if (symbol.Token != Token.TokenCloseCBrackets)
+                    {
+                        error("Esperava um '}'");
+                    }
                     break;
                 case Token.TokenKeywordTry:
                     // tryStatement();
@@ -92,10 +109,6 @@ namespace dart_compiler.Core.Parser.Partials
                     else
                         expressionStatement();
                     break;
-            }
-            if (symbol.Token != Token.TokenCloseCBrackets)
-            {
-                error("Esperava um '}'");
             }
         }
 
