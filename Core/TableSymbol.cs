@@ -61,6 +61,10 @@ namespace dart_compiler.Core
             return symbols[--currentSymbolPosition];
         }
 
+        public static void ResetSymbolIndex()
+        {
+            currentSymbolPosition = -1;
+        }
 
         /// <summary>
         /// Verifica se ainda existem símbolos a serem lidos

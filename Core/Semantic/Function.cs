@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace dart_compiler.Core.Utils
+namespace dart_compiler.Core.Semantic
 {
     public class Function
     {

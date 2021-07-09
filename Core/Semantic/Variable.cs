@@ -1,4 +1,4 @@
-namespace dart_compiler.Core.Utils
+namespace dart_compiler.Core.Semantic
 {
     public class Variable
     {

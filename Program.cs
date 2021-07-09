@@ -5,6 +5,7 @@ using dart_compiler.Core.Scanner;
 using dart_compiler.Core;
 using dart_compiler.Core.ErrorReport;
 using dart_compiler.Core.Parser;
+using dart_compiler.Core.Semantic;
 // using dart_compiler.Core.Parser;
 
 namespace dart_compiler
@@ -71,6 +72,16 @@ namespace dart_compiler
                 parser.StartParsing(null);
             }
 
+            if (ErrorList.ExistsErrors())
+            {
+                ErrorList.PrintErrors();
+                return -1;
+            }
+
+            TableSymbol.ResetSymbolIndex();
+            Semantic semanticAnaliser = new Semantic();
+            semanticAnaliser.StartAnalyzer();
+
             // Imprime os erros encontrados
             if (ErrorList.ExistsErrors())
             {
@@ -78,9 +89,7 @@ namespace dart_compiler
                 return -1;
             }
             else
-            {
                 Console.WriteLine("Compilado com sucesso!");
-            }
             return 0;
         }
     }
