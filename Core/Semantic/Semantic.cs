@@ -97,10 +97,10 @@ namespace dart_compiler.Core.Semantic
                             isConditionalExpression = true;
                         }
                     }
-                    else if (isConditionalOperator(currentSymbol.Token))
-                    {
-                        isConditionalExpression = true;
-                    }
+                }
+                else if (isConditionalOperator(currentSymbol.Token))
+                {
+                    isConditionalExpression = true;
                 }
                 readSymbol();
             }
