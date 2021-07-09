@@ -26,5 +26,23 @@ namespace dart_compiler.Core.Semantic
             ValueAssigned = valueAssigned;
         }
 
+        public override string ToString()
+        {
+            return $"ID: {Identifier};Type: {DataType};ScopeLevel: {Scope}";
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Variable))
+                return false;
+            var variable = (Variable)obj;
+            return variable.Identifier == this.Identifier;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

@@ -19,5 +19,23 @@ namespace dart_compiler.Core.Semantic
             Arguments = new List<Variable>();
             ReturnType = returnType;
         }
+
+        public override string ToString()
+        {
+            return $"ID: {Identifier};ReturnType: {ReturnType} with {Arguments.Count} arguments";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Function))
+                return false;
+            var function = (Function)obj;
+            return function.Identifier == this.Identifier;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
