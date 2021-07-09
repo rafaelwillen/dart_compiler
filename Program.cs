@@ -88,8 +88,9 @@ namespace dart_compiler
                 ErrorList.PrintErrors();
                 return -1;
             }
-            else
-                Console.WriteLine("Compilado com sucesso!");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Compilado com sucesso!");
+            Console.ResetColor();
             return 0;
         }
     }
