@@ -119,6 +119,13 @@ namespace dart_compiler.Core.Semantic
                 error($"Variável '{varName}' não foi declarada");
                 return;
             }
+            var variable = findVariable(varName);
+            if (variable.IsConstFinal)
+            {
+                error("Não é possível atribuir valor em uma constante");
+                return;
+            }
+
             //TODO: Check type assignment;
         }
 
@@ -134,13 +141,15 @@ namespace dart_compiler.Core.Semantic
             }
             string varName = currentSymbol.Lexeme;
             readSymbol();
-            var variable = new Variable(varName, varType, currentScope);
-            Console.WriteLine(variable);
+            var variable = new Variable(varName, varType, currentScope, isConstFinal);
             string valueAssigned = "$";
+            if (currentSymbol.Token != Token.TokenAssignment && isConstFinal)
+            {
+                error("Constante sem valor atribuído");
+                return;
+            }
             while (currentSymbol.Token != Token.TokenEndStatement)
             {
-                if (currentSymbol.Token == Token.TokenAssignment)
-                    readSymbol();
                 //TODO: Check type assignment;
                 readSymbol();
             }
@@ -168,7 +177,7 @@ namespace dart_compiler.Core.Semantic
                 string argType = currentSymbol.Lexeme;
                 readSymbol();
                 string argName = currentSymbol.Lexeme;
-                var variable = new Variable(argName, argType, currentScope + 1);
+                var variable = new Variable(argName, argType, currentScope + 1, false);
                 function.Arguments.Add(variable);
                 readSymbol();
             }

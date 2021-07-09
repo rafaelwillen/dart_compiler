@@ -10,12 +10,15 @@ namespace dart_compiler.Core.Semantic
 
         public int Scope { get; set; }
 
-        public Variable(string identifier, string dataType, int scopeLevel)
+        public bool IsConstFinal { get; private set; }
+
+        public Variable(string identifier, string dataType, int scopeLevel, bool isConstFinal)
         {
             Identifier = identifier;
             DataType = dataType;
             Scope = scopeLevel;
             ValueAssigned = string.Empty;
+            IsConstFinal = isConstFinal;
         }
 
         public Variable(string identifier, string dataType, int scopeLevel, string valueAssigned)
