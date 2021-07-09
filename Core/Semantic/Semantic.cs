@@ -29,23 +29,97 @@ namespace dart_compiler.Core.Semantic
                 {
                     analyzeFunctionSignature();
                 }
-
-                if (currentSymbol.Token == Token.TokenOpenCBrackets)
+                else if (currentSymbol.Token == Token.TokenOpenCBrackets)
                     currentScope++;
-
-                if (currentSymbol.Token == Token.TokenCloseCBrackets)
+                else if (currentSymbol.Token == Token.TokenCloseCBrackets)
                     currentScope--;
-
-                if (currentScope < 0)
+                else if (currentScope < 0)
                 {
                     error("Mau término do escopo. Encontrado '}' a mais");
                 }
-
-                if (isVariableDeclaration(currentSymbol))
+                else if (isVariableDeclaration(currentSymbol))
                 {
                     analyzeVariableDeclaration();
                 }
+                else if (currentSymbol.Token == Token.TokenID)
+                {
+                    analyzeAssignment();
+                }
+                else if (currentSymbol.Token == Token.TokenKeywordIf || currentSymbol.Token == Token.TokenKeywordWhile)
+                {
+                    analyzeControlStatement();
+                }
+                else if (currentSymbol.Token == Token.TokenKeywordSwitch)
+                {
+                    analyzeSwitchStatement();
+                }
             }
+        }
+
+        private void analyzeCaseStatement()
+        {
+            readSymbol(); readSymbol();
+            if (!isLiteral(currentSymbol.Token))
+            {
+                error($"Esperava um literal mas foi encontrado '{currentSymbol.Token}'");
+                return;
+            }
+
+        }
+
+        private void analyzeSwitchStatement()
+        {
+            readSymbol(); readSymbol();
+            if (!variableExists(currentSymbol.Lexeme))
+            {
+                error($"Variável '{currentSymbol.Lexeme}' não foi declarada");
+            }
+        }
+
+        private void analyzeControlStatement()
+        {
+            bool isConditionalExpression = false;
+            readSymbol();
+            while (currentSymbol.Token != Token.TokenCloseParenteses)
+            {
+                if (currentSymbol.Token == Token.TokenID)
+                {
+                    string identifier = currentSymbol.Lexeme;
+                    if (!variableExists(identifier))
+                    {
+                        error($"Variável '{identifier}' não foi declarada");
+                    }
+                    else if (variableExists(identifier))
+                    {
+                        var variable = findVariable(identifier);
+                        if (variable.DataType == "bool")
+                        {
+                            isConditionalExpression = true;
+                        }
+                    }
+                    else if (isConditionalOperator(currentSymbol.Token))
+                    {
+                        isConditionalExpression = true;
+                    }
+                }
+                readSymbol();
+            }
+
+            if (!isConditionalExpression)
+            {
+                error($"Expressão condicional inválida");
+            }
+        }
+
+        private void analyzeAssignment()
+        {
+            string varName = currentSymbol.Lexeme;
+            if (!variableExists(varName))
+            {
+                error($"Variável '{varName}' não foi declarada");
+                return;
+            }
+            //TODO: Check type assignment;
         }
 
         private void analyzeVariableDeclaration()
@@ -67,6 +141,7 @@ namespace dart_compiler.Core.Semantic
             {
                 if (currentSymbol.Token == Token.TokenAssignment)
                     readSymbol();
+                //TODO: Check type assignment;
                 readSymbol();
             }
             if (valueAssigned == "$")
@@ -79,7 +154,6 @@ namespace dart_compiler.Core.Semantic
                 return;
             }
             variables.Add($"{variable.Identifier}${currentScope}", variable);
-
         }
 
         private void analyzeFunctionSignature()
@@ -172,5 +246,26 @@ namespace dart_compiler.Core.Semantic
             }
         }
 
+        private bool variableExists(String varName)
+        {
+            for (int i = currentScope; i >= 0; i--)
+            {
+                if (variables.ContainsKey($"{varName}${i}"))
+                    return true;
+            }
+            return false;
+        }
+
+        private Variable findVariable(string name)
+        {
+            for (int i = currentScope; i >= 0; i--)
+            {
+                if (variables.ContainsKey($"{name}${i}"))
+                {
+                    return variables[$"{name}${i}"];
+                }
+            }
+            return null;
+        }
     }
 }

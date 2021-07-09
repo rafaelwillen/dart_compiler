@@ -83,10 +83,6 @@ namespace dart_compiler.Core.Parser.Partials
                     break;
                 case Token.TokenKeywordSwitch:
                     switchStatement();
-                    if (symbol.Token != Token.TokenCloseCBrackets)
-                    {
-                        error("Esperava um '}'");
-                    }
                     break;
                 case Token.TokenKeywordIf:
                     ifStatement();
@@ -321,8 +317,10 @@ namespace dart_compiler.Core.Parser.Partials
                 readNextSymbol();
             else
                 error("Esperava um '('");
-            var expressionParser = new ExpressionParser();
-            symbol = expressionParser.StartParsing(symbol);
+            if (symbol.Token == Token.TokenID)
+                readNextSymbol();
+            else
+                error("Esperava um identificador");
             if (symbol.Token == Token.TokenCloseParenteses)
                 readNextSymbol();
             else
